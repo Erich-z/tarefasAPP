@@ -1,17 +1,19 @@
-import {call, put, all, takeLatest, delay} from 'redux-saga/effects';
+import {call, put, all, takeLatest, select, delay} from 'redux-saga/effects';
 import api from '../../../../services/api';
 import { CRIAR_TAREFA_FAILURE, CRIAR_TAREFA_REQUEST, CRIAR_TAREFA_SUCCESS, DELETE_TAREFA_FAILURE, DELETE_TAREFA_REQUEST, DELETE_TAREFA_SUCCESS, LISTAR_TAREFA_FAILURE, LISTAR_TAREFA_REQUEST, LISTAR_TAREFA_SUCCESS, SHOW_TAREFA_FAILURE, SHOW_TAREFA_REQUEST, SHOW_TAREFA_SUCCESS, UPDATE_TAREFA_FAILURE, UPDATE_TAREFA_REQUEST, UPDATE_TAREFA_SUCCESS } from './actions';
 
 function* listarTarefa(action) {
-    try {
-      yield delay(3000);
-      const response = yield call(() => api.get(`/tarefas`));
-      const tarefa = response.data;
-      console.log(tarefa);
-      yield put({ type: LISTAR_TAREFA_SUCCESS, payload: tarefa });
-    } catch (error) {
-      yield put({ type: LISTAR_TAREFA_FAILURE, payload: error.message });
-    }
+  try {
+    yield delay(3000);
+    const state = yield select();
+    const usuarioId = state.usuario.usuario.id;
+    const response = yield call(() => api.get(`/tarefas/?usuarioId=${usuarioId}`));
+    const tarefa = response.data;
+    console.log(tarefa);
+    yield put({ type: LISTAR_TAREFA_SUCCESS, payload: tarefa });
+  } catch (error) {
+    yield put({ type: LISTAR_TAREFA_FAILURE, payload: error.message });
+  }
   }
   
   function* showTarefa(action) {
@@ -28,8 +30,9 @@ function* listarTarefa(action) {
   // add empresa
   function* criarTarefa(action) {
     try {
-      console.log(action.payload.tarefa);
-      const response = yield call(() => api.post('/tarefas', action.payload.tarefa));
+      const state = yield select();
+      const usuarioId = state.usuario.usuario.id;
+      const response = yield call(() => api.post(`/tarefas/?usuarioId=${usuarioId}`, action.payload.tarefa));
       const tarefa = response.data;
       yield put({ type: CRIAR_TAREFA_SUCCESS, payload: tarefa });
     } catch (error) {

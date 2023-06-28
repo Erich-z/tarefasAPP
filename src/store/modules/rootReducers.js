@@ -6,5 +6,6 @@ import tarefa from './tarefa/reducers';
 
 export default combineReducers({
     auth,
-    usuario, tarefa
+    usuario, 
+    tarefa
 });

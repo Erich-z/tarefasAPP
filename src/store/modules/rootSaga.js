@@ -7,6 +7,7 @@ import tarefa from './tarefa/sagas'
 export default function* rootSaga() {
     return yield all([
         auth,
-        usuario,tarefa
+        usuario,
+        tarefa
     ]);
 }

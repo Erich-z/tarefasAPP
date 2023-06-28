@@ -47,6 +47,7 @@ import { listarTarefaRequest, updateTarefaRequest } from "../src/store/modules/t
 
     const dispatch = useDispatch();
     const tarefa = useSelector(({tarefa}) =>tarefa)
+    const usuario = useSelector(({usuario}) => usuario); 
     const [novaTarefa, setNovaTarefa] = useState('ESTUDAR REACT NATIVE');
     const [tarefas, setTarefas] = useState([])
     
